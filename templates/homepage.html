@@ -27,5 +27,18 @@
           </div>
         </div>
     </nav>
+      {% block body %}
+      
+      
+    {% for i in item  %}
+    <ul>
+      <li>
+        {{i.username}}
+      </li>
+    </ul>
+  {% endfor %}
+
+      {% endblock body %}
+
 </body>
 </html>
