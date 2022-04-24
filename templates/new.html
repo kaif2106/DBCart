@@ -23,12 +23,28 @@
               <div class="media-body mx-3 my-2">
                 <h5 class="mt-0 mb-1">{{product.category}}</h5>
                 {{product._desc}}
+<<<<<<< HEAD
                 <br><br>
                 <!-- <button type="button" class="btn btn-dark" name >Add to Cart</button> -->
                 <form method="POST" action="/cart">
                     <input type="submit" value="Add to cart" name="action1"/>
               
                 </form>
+=======
+                <br><br> <div class="btn-group">
+                    <button type="button" class="btn btn-dark">Add to Cart</button>
+                    <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="sr-only">Quantity</span>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="#">1</a>
+                      <a class="dropdown-item" href="#">2</a>
+                      <a class="dropdown-item" href="#">3</a>
+                      <a class="dropdown-item" href="#">4</a>
+                      <a class="dropdown-item" href="#">5</a>
+                    </div>
+                  </div>
+>>>>>>> f2f2f13de71c333b82274dd9e65147447b887e73
               </div>
            
 
