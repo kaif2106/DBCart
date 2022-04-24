@@ -34,7 +34,8 @@ def hello():
     cur.execute("select * from product")
     results = cur.fetchall()
     cur.close()
-
+    if request.method=='POST':
+        print(request.form['action1'])
     return render_template('new.html', products = results)
 
 @app.route("/cart")

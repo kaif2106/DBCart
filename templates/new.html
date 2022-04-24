@@ -23,7 +23,12 @@
               <div class="media-body mx-3 my-2">
                 <h5 class="mt-0 mb-1">{{product.category}}</h5>
                 {{product._desc}}
-                <br><br><button type="button" class="btn btn-dark">Add to Cart</button>
+                <br><br>
+                <!-- <button type="button" class="btn btn-dark" name >Add to Cart</button> -->
+                <form method="POST" action="/cart">
+                    <input type="submit" value="Add to cart" name="action1"/>
+              
+                </form>
               </div>
            
 
