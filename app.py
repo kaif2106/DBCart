@@ -30,10 +30,16 @@ def hello_world():
 
 @app.route("/products")
 def hello():
-    return render_template('new.html')
+    cur = mysql.connection.cursor()
+    cur.execute("select * from product")
+    results = cur.fetchall()
+    cur.close()
+
+    return render_template('new.html', products = results)
 
 @app.route("/cart")
 def cart():
+    
     return render_template('cart.html')
 
 if __name__ == "__main__":
