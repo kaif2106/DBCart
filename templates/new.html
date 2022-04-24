@@ -23,7 +23,19 @@
               <div class="media-body mx-3 my-2">
                 <h5 class="mt-0 mb-1">{{product.category}}</h5>
                 {{product._desc}}
-                <br><br><button type="button" class="btn btn-dark">Add to Cart</button>
+                <br><br> <div class="btn-group">
+                    <button type="button" class="btn btn-dark">Add to Cart</button>
+                    <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="sr-only">Quantity</span>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="#">1</a>
+                      <a class="dropdown-item" href="#">2</a>
+                      <a class="dropdown-item" href="#">3</a>
+                      <a class="dropdown-item" href="#">4</a>
+                      <a class="dropdown-item" href="#">5</a>
+                    </div>
+                  </div>
               </div>
            
 
