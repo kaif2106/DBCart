@@ -6,7 +6,7 @@ from flask_mysqldb import MySQL
 app = Flask(__name__)
 
 app.config['MYSQL_USER']="root"
-app.config['MYSQL_PASSWORD']="kushiluv25"
+app.config['MYSQL_PASSWORD']="password"
 app.config['MYSQL_HOST']="localhost"
 app.config['MYSQL_DB']="ecommerce"
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -28,7 +28,7 @@ def hello_world():
     # print(results)
     return render_template('homepage.html')
 
-@app.route("/products")
+@app.route('/products', methods=['GET', 'POST'])
 def hello():
     cur = mysql.connection.cursor()
     cur.execute("select * from product")
@@ -38,7 +38,7 @@ def hello():
         print(request.form['action1'])
     return render_template('new.html', products = results)
 
-@app.route("/cart")
+@app.route("/cart", methods=['GET', 'POST'])
 def cart():
     
     return render_template('cart.html')
