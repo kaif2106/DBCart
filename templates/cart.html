@@ -20,7 +20,7 @@
           <div class="media-body mx-3 my-2">
             <h5 class="mt-0 mb-1">Product name</h5>
             Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            <br><br><button type="button" class="btn btn-dark">Add to Cart</button>
+            
           </div>
           
             
@@ -42,7 +42,11 @@
             </div>
           </li>
       </ul>
-      <div class="m-5 bg-dark text-white text-justify">subtotal</div>
+      <span class="m-5 p-5 h-50 d-inline-block bg-dark text-white text-justify">
+          <p>Subtotal(Y items) ₹XXXX.99</p>
+          <button class="btn btn-outline-light " type="submit">Checkout</button>
+    </span>
+      
     </div>
     {% endblock body %}
     
