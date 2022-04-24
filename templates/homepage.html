@@ -24,13 +24,19 @@
         </div>
     </nav>
       {% block body %}
-      
+
+      {% for message in get_flashed_messages() %}
+      <div class="alert alert-danger" role="alert">
+        {{message}}
+      </div>
+      {% endfor %}
+
       <div class="container">
       <form class="mx-auto" method = "POST">
         <p>Select between user and seller:</p>
-      <input type="radio" id="customer" name="options" value="customer">
+      <input type="radio" id="customer" name="options" value="C">
       <label for="age1">Customer</label><br>
-    <input type="radio" id="seller" name="options" value="seller">
+    <input type="radio" id="seller" name="options" value="S">
     <label for="age2">Seller</label><br>  
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Username</label>
