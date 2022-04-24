@@ -51,7 +51,7 @@ def hello():
         cur.execute("insert into cart (p_id, c_id, quantity) values ('" + str(request.form['action1']) + "', 'imccollum2', '1')")
         cur.connection.commit()
     cur.close()
-    return render_template('new.html', products = results)
+    return render_template('products.html', products = results)
 
 @app.route("/cart", methods=['GET', 'POST'])
 def cart():
@@ -61,6 +61,15 @@ def cart():
 def seller():
     
     return render_template('seller.html')    
+
+@app.route("/customer", methods=['GET', 'POST'])
+
+def customer():
+    cur = mysql.connection.cursor()
+    cur.execute("select * from _order")
+    results = cur.fetchall()
+    print(results)
+    return render_template('customer.html',orders = results)  
 
 if __name__ == "__main__":
     app.run(debug=True)

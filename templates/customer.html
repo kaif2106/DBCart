@@ -1,0 +1,112 @@
+{% extends 'homepage.html' %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% block body %}
+
+    <!-- <div class="w-5 container bg-white m-5 d-flex justify-content-center">
+      <button type="button" class="m-2 p-5 btn btn-outline-dark btn-lg btn-block">Add</button>
+      <button type="button" class="w-10 m-2 p-5 btn btn-outline-dark btn-lg btn-block">Update</button>
+      <button type="button" class="w-10 m-2 p-5 rounded btn btn-outline-dark btn-lg btn-block">Delete</button>
+      </div> -->
+     
+      <div class=" container bg-white m-5 d-flex justify-content-center btn-group">
+        <button class=" m-2 p-5 btn btn-outline-dark btn-lg btn-block" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+         Update personal information
+        </button>
+        <button class=" m-2 p-5 btn btn-outline-dark btn-lg btn-block" type="button" data-toggle="collapse" data-target="#collapseExample1" aria-expanded="false" aria-controls="collapseExample1">
+          View your orders
+        </button>
+      </div>
+      
+      <div class="container collapse" id="collapseExample">
+        <div class="card card-body">
+          <form>
+            <p>Enter the details you want to update.</p>
+            <div class="form-group">
+              <label for="First_name">First Name</label>
+              <input type="text" class="form-control" id="First_name" required>
+            </div>
+            <div class="form-group">
+              <label for="First_name">Last Name</label>
+              <input type="text" class="form-control" id="last_name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="Pincode">Pincode</label>
+              <input type="number" class="form-control" id="Pincode" >
+            </div>
+            <div class="form-group">
+              <label for="Phone_num">Phone number</label>
+              <input type="number" class="form-control" id="Phone_num" >
+            </div>
+            <div class="form-group">
+              <label for="Email">Email</label>
+              <input type="email" class="form-control" id="email" >
+            </div>
+            
+            <div class="form-group">
+              <label for="add_line1">Address line 1</label>
+              <textarea class="form-control" id="add_line1" rows="3" ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="add_line2">Address line 2</label>
+              <textarea class="form-control" id="add_line2" rows="3" ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="Landmark">Landmark</label>
+              <textarea class="form-control" id="Landmark" rows="3" ></textarea>
+            </div>
+            <button type="submit" class="my-3 btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+      <div class="container collapse" id="collapseExample1">
+        <div class="card card-body">
+            <h2>Your Orders</h2>
+        
+                {% if orders|length == 0 %}
+                   
+                <div class="alert alert-dark" role="alert">
+                    No orders found.
+                  </div>
+                    {% else %} 
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">S.no</th>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Payment Type</th>
+                            <th scope="col">Total cost</th>
+
+                          </tr>
+                        </thead>
+                        
+                        <tbody>
+              {% for order in orders %}
+              <tr>
+                <th scope="row">{{loop.index}}</th>
+                <td>{{order.order_id}}</td>
+                <td>{{order.payment_type}}</td>
+                <td>{{order.total_cost}}</td>
+                
+              </tr>
+              
+              {% endfor %}
+            </tbody>
+            </table>
+              {% endif %}
+        </div>
+      </div>      
+    {% endblock body %}
+    
+</body>
+</html>
