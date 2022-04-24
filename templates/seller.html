@@ -18,7 +18,7 @@
       <button type="button" class="w-10 m-2 p-5 rounded btn btn-outline-dark btn-lg btn-block">Delete</button>
       </div> -->
      
-      <div class="w-5 container bg-white m-5 d-flex justify-content-center">
+      <div class=" container bg-white m-5 d-flex justify-content-center btn-group">
         <button class="m-2 p-5 btn btn-outline-dark btn-lg btn-block" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
           Add a product
         </button>
@@ -27,6 +27,9 @@
         </button>
         <button class="m-2 p-5 btn btn-outline-dark btn-lg btn-block" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">
           Delete a product
+        </button>
+        <button class="m-2 p-5 btn btn-outline-dark btn-lg btn-block" type="button" data-toggle="collapse" data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample3">
+          Update personal information
         </button>
       </div>
       <div class="collapse" id="collapseExample">
@@ -109,6 +112,48 @@
           </form>
         </div>
       </div> 
+      <div class="container collapse" id="collapseExample3">
+        <div class="card card-body">
+          <form>
+            <p>Enter the details you want to update.</p>
+            <div class="form-group">
+              <label for="First_name">First Name</label>
+              <input type="text" class="form-control" id="First_name" required>
+            </div>
+            <div class="form-group">
+              <label for="First_name">Last Name</label>
+              <input type="text" class="form-control" id="last_name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="Pincode">Pincode</label>
+              <input type="number" class="form-control" id="Pincode" >
+            </div>
+            <div class="form-group">
+              <label for="Phone_num">Phone number</label>
+              <input type="number" class="form-control" id="Phone_num" >
+            </div>
+            <div class="form-group">
+              <label for="Email">Email</label>
+              <input type="email" class="form-control" id="email" >
+            </div>
+            
+            <div class="form-group">
+              <label for="add_line1">Address line 1</label>
+              <textarea class="form-control" id="add_line1" rows="3" ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="add_line2">Address line 2</label>
+              <textarea class="form-control" id="add_line2" rows="3" ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="Landmark">Landmark</label>
+              <textarea class="form-control" id="Landmark" rows="3" ></textarea>
+            </div>
+            <button type="submit" class="my-3 btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
      
     {% endblock body %}
     
