@@ -1,3 +1,4 @@
+from unittest import result
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_mysqldb import MySQL
@@ -18,8 +19,20 @@ mysql = MySQL(app)
 
 @app.route("/",methods=["GET","POST"])
 def hello_world():
+    cur = mysql.connection.cursor()
     if request.method=='POST':
-        print(request.form['options'])
+        if request.form['login/signup'] == 'login':
+            entered_username = request.form['username']
+            print(entered_username)
+            entered_pass = request.form['pass']
+            entered_type = request.form['options']
+            cur.execute("select exists(select * from user where username='"+str(entered_username)+"' and passwd='"+str(entered_pass)+"')")
+            result = cur.fetchall()
+            first_value = list(result[0].items())[0][1]
+            print(first_value)
+        elif request.form['login/signup'] == 'signup':
+            pass
+    cur.close()
     
     # cur = mysql.connection.cursor()
     # cur.execute("select * from user")

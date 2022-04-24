@@ -26,22 +26,24 @@
       {% block body %}
       
       <div class="container">
-      <form class="mx-auto" action="/" method = "POST">
+      <form class="mx-auto" method = "POST">
         <p>Select between user and seller:</p>
       <input type="radio" id="customer" name="options" value="customer">
       <label for="age1">Customer</label><br>
     <input type="radio" id="seller" name="options" value="seller">
     <label for="age2">Seller</label><br>  
         <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">Email address</label>
-          <input type="email" name="email" id="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+          <label for="exampleInputEmail1" class="form-label">Username</label>
+          <input type="text" name="username" id="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          <div id="emailHelp" class="form-text">We'll never share your username with anyone else.</div>
         </div>
         <div class="mb-3">
           <label for="exampleInputPassword1" class="form-label">Password</label>
           <input type="password" name="pass" id="pass" class="form-control" id="exampleInputPassword1">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" name = "login/signup" value="login">Log In</button>
+        <button type="submit" class="btn btn-primary" name = "login/signup" value="signup">Sign Up</button>
+
       </form>
     </div>
 
