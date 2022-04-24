@@ -33,9 +33,11 @@ def hello():
     cur = mysql.connection.cursor()
     cur.execute("select * from product")
     results = cur.fetchall()
-    cur.close()
+    
     if request.method=='POST':
-        print(request.form['action1'])
+        cur.execute("insert into cart (p_id, c_id, quantity) values ('" + str(request.form['action1']) + "', 'imccollum2', '1')")
+        cur.connection.commit()
+    cur.close()
     return render_template('new.html', products = results)
 
 @app.route("/cart", methods=['GET', 'POST'])
