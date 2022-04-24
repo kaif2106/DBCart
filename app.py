@@ -28,9 +28,13 @@ def hello_world():
     # print(results)
     return render_template('homepage.html')
 
-@app.route("/wtv")
+@app.route("/products")
 def hello():
     return render_template('new.html')
+
+@app.route("/cart")
+def cart():
+    return render_template('cart.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

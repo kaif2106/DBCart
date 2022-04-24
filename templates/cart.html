@@ -1,0 +1,43 @@
+{% extends 'homepage.html' %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% block body %}
+    <div class="container d-flex">
+    <ul class="list-unstyled container p-3 bg-white ">
+        <li class="media d-flex my-5">
+          <img src="https://picsum.photos/id/1002/200/300" class="mr-3" alt="...">
+          <div class="media-body mx-3 my-2">
+            <h5 class="mt-0 mb-1">Product name</h5>
+            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+          </div>
+        </li>
+        <li class="media d-flex my-5">
+            <img src="https://picsum.photos/id/1002/200/300" class="mr-3" alt="...">
+            <div class="media-body mx-3 my-2">
+              <h5 class="mt-0 mb-1">Product name</h5>
+              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+            </div>
+          </li>
+          <li class="media d-flex my-5">
+            <img src="https://picsum.photos/id/1002/200/300" class="mr-3" alt="...">
+            <div class="media-body mx-3 my-2">
+              <h5 class="mt-0 mb-1">Product name</h5>
+              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+            </div>
+          </li>
+      </ul>
+      <div class="m-5 bg-dark text-white text-justify">subtotal</div>
+    </div>
+    {% endblock body %}
+    
+</body>
+</html>
