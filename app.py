@@ -44,6 +44,10 @@ def hello():
 def cart():
     
     return render_template('cart.html')
+@app.route("/seller", methods=['GET', 'POST'])
+def seller():
+    
+    return render_template('seller.html')    
 
 if __name__ == "__main__":
     app.run(debug=True)
