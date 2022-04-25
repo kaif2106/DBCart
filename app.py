@@ -67,6 +67,9 @@ def products(cid):
     if request.method=='POST':
         cur.execute(f"insert into cart (p_id, c_id, quantity) values ('{request.form['action1']}', '{cid}', '1')")
         cur.connection.commit()
+        select = request.form.get('quantity')
+        print(str(select))
+        
     cur.close()
     return render_template('products.html', products = results)
 
