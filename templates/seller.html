@@ -34,71 +34,69 @@
       </div>
       <div class="collapse" id="collapseExample">
         <div class="card card-body">
-          <form>
-            <div class="form-group">
-              <label for="Product_id">Product ID</label>
-              <input type="number" class="form-control" id="Product_id" placeholder="Product_id">
-            </div>
+          <form method = "POST">
             <div class="form-group">
               <label for="Product_name">Product Name</label>
-              <input type="text" class="form-control" id="Product_name" placeholder="Product_name">
+              <input type="text" class="form-control" name="Product_name" id="Product_name" placeholder="Product_name">
             </div>
             <div class="form-group">
               <label for="Product_id">Product category</label>
-              <input type="text" class="form-control" id="Product_category" placeholder="Product_category">
+              <input type="text" class="form-control" name="Product_category" id="Product_category" placeholder="Product_category">
             </div>
             <div class="form-group">
               <label for="Product_name">Price</label>
-              <input type="number" class="form-control" id="Product_name" placeholder="₹XXXX.YY">
+              <input type="number" step = "0.01" class="form-control" name="Product_price" id="Product_price" placeholder="₹XXXX.YY">
             </div>
             <div class="form-group">
               <label for="Product_name">Discount</label>
-              <input type="number" class="form-control" id="Product_name" placeholder="XX.YY">
+              <input type="number" step = "0.01" class="form-control" name="Product_discount" id="Product_discount" placeholder="XX.YY">
             </div>
             <div class="form-group">
               <label for="Product_image">Product Image</label>
-              <input type="url" class="form-control" id="Product_image" placeholder="Enter url of an image">
+              <input type="url" class="form-control" name="Product_image" id="Product_image" placeholder="Enter url of an image">
             </div>
             
             <div class="form-group">
               <label for="Product_desc">Product description</label>
-              <textarea class="form-control" id="Product_desc" rows="3" placeholder="Product_desc"></textarea>
+              <textarea class="form-control" name="Product_desc" id="Product_desc" rows="3" placeholder="Product_desc"></textarea>
             </div>
+            <button type="submit" name = "aud" value = "add" class="my-3 btn btn-primary">Submit</button>
           </form>
         </div>
       </div>
       <div class="collapse" id="collapseExample1">
         <div class="card card-body">
-          <form>
+          <form method = "POST">
             <div class="form-group">
               <label for="Product_id">Product ID</label>
-              <input type="number" class="form-control" id="Product_id" placeholder="Product_id">
+              <input type="number" class="form-control" name = "Product_id" id="Product_id" placeholder="Product_id">
             </div>
             <div class="form-group">
               <label for="Product_name">Updated Product Name</label>
-              <input type="text" class="form-control" id="Product_name" placeholder="Leave blank if you dont wish to update this field">
+              <input type="text" class="form-control" name="Product_name" id="Product_name" placeholder="Leave blank if you dont wish to update this field">
             </div>
             <div class="form-group">
               <label for="Product_id">Updated Product category</label>
-              <input type="text" class="form-control" id="Product_category" placeholder="Leave blank if you dont wish to update this field">
+              <input type="text" class="form-control" name="Product_category" id="Product_category" placeholder="Leave blank if you dont wish to update this field">
             </div>
             <div class="form-group">
               <label for="Product_name">Updated Price</label>
-              <input type="number" class="form-control" id="Product_name" placeholder="Leave blank if you dont wish to update this field">
+              <input type="number" class="form-control" name="Product_price" id="Product_price" placeholder="Leave blank if you dont wish to update this field">
             </div>
             <div class="form-group">
               <label for="Product_name">Updated Discount</label>
-              <input type="number" class="form-control" id="Product_name" placeholder="Leave blank if you dont wish to update this field">
+              <input type="number" class="form-control" name="Product_discount" id="Product_discount" placeholder="Leave blank if you dont wish to update this field">
             </div>
             <div class="form-group">
               <label for="Product_image">Updated Product Image</label>
-              <input type="url" class="form-control" id="Product_image" placeholder="Leave blank if you dont wish to update this field">
+              <input type="url" class="form-control" name="Product_image" id="Product_image" placeholder="Leave blank if you dont wish to update this field">
             </div>
             
             <div class="form-group">
               <label for="product_desc">Updated Product description</label>
-              <textarea class="form-control" id="product_desc" rows="3" placeholder="Leave blank if you dont wish to update this field"></textarea>
+              <textarea class="form-control" name="product_desc" id="product_desc" rows="3" placeholder="Leave blank if you dont wish to update this field"></textarea>
             </div>
+            <button type="submit" name = "aud" value = "updateProduct" class="my-3 btn btn-primary">Submit</button>
           </form>
         </div>
       </div> 
@@ -109,6 +107,7 @@
               <label for="Product_id">Product ID</label>
               <input type="number" class="form-control" id="Product_id" placeholder="Enter product id to be deleted">
             </div>
+            <button type="submit" name = "aud" value = "Delete" class="my-3 btn btn-primary">Submit</button>
           </form>
         </div>
       </div> 
@@ -150,7 +149,7 @@
               <label for="Landmark">Landmark</label>
               <textarea class="form-control" id="Landmark" rows="3" ></textarea>
             </div>
-            <button type="submit" class="my-3 btn btn-primary">Submit</button>
+            <button type="submit" name = "aud" value = "updateSeller" class="my-3 btn btn-primary">Submit</button>
           </form>
         </div>
       </div>

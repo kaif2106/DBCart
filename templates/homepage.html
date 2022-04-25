@@ -23,12 +23,20 @@
           
         </div>
     </nav>
+
+    {% for message in get_flashed_messages() %}
+      <div class="alert alert-danger" role="alert">
+        {{message}}
+      </div>
+      {% endfor %}
+
+
       {% block body %}
       <div class=" container bg-white my-5 d-flex justify-content-center">
-        <button class=" btn btn-outline-primary btn-lg " name = "login/signup" value="login" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        <button type="button" class="btn btn-outline-primary btn-lg" name = "op" value="login"  data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
           Login
         </button>
-        <button class="  btn mx-1 btn-outline-primary btn-lg " name = "login/signup" value="signup" type="button" data-toggle="collapse" data-target="#collapseExample1" aria-expanded="false" aria-controls="collapseExample1">
+        <button type="button" class="btn mx-1 btn-outline-primary btn-lg" name = "op" value="signup" data-toggle="collapse" data-target="#collapseExample1" aria-expanded="false" aria-controls="collapseExample1">
           Sign up
         </button>
       </div>
@@ -36,9 +44,9 @@
         <div class="card card-body">
       <form class="mx-auto" method = "POST">
         <p>Select between user and seller:</p>
-      <input type="radio" id="customer" name="options" value="customer" required>
+      <input type="radio" id="customer" name="options" value="C" required>
       <label for="age1">Customer</label><br>
-    <input type="radio" id="seller" name="options" value="seller" required>
+    <input type="radio" id="seller" name="options" value="S" required>
     <label for="age2">Seller</label><br>  
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Username</label>
@@ -49,7 +57,7 @@
           <label for="exampleInputPassword1" class="form-label">Password</label>
           <input type="password" name="pass" id="pass" class="form-control" id="exampleInputPassword1">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" name = "login/signup" value="login" class="btn btn-primary">Submit</button>
 
 
       </form>
@@ -59,9 +67,9 @@
       <div class="card card-body">
         <form>
           <p>Select between user and seller:</p>
-            <input type="radio" id="customer" name="options" value="customer">
+            <input type="radio" id="customer" name="options" value="C">
             <label for="age1">Customer</label><br>
-            <input type="radio" id="seller" name="options" value="seller">
+            <input type="radio" id="seller" name="options" value="S">
             <label for="age2">Seller</label><br>
           <div class="form-group">
             <label for="Username">Create your Username</label>
@@ -100,7 +108,7 @@
             <label for="Landmark">Landmark</label>
             <textarea class="form-control" id="Landmark" rows="3" ></textarea>
           </div>
-          <button type="submit" class="my-3 btn btn-primary">Submit</button>
+          <button type="submit" name = "login/signup" value = "signup" class="my-3 btn btn-primary">Submit</button>
         </form>
       </div>
     </div>
