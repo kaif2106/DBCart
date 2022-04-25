@@ -102,6 +102,23 @@ def seller(sid):
     return render_template('seller.html')    
 
 
+def customer():
+    cur = mysql.connection.cursor()
+    cur.execute("select * from _order")
+    results = cur.fetchall()
+    print(results)
+    return render_template('customer.html',orders = results) 
+
+@app.route("/history", methods=['GET', 'POST'])
+
+def history():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT history.quantity, history.order_date ,history.p_id,history.order_id,history._status,product.p_name ,product.price ,product.category ,product.images,product.s_id,product._desc FROM history INNER JOIN product ON history.p_id=product.p_id;")
+    results = cur.fetchall()
+    for i in results:
+        i['price'] = "{:.2f}".format(i['price']*i['quantity'])
+    
+    return render_template('history.html',history = results) 
 
 if __name__ == "__main__":
     app.run(debug=True)
