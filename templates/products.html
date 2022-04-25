@@ -7,12 +7,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <title>Document</title>
 </head>
 <body>
     {% block body %}
-    
-    <div class="container d-flex">
         <ul class="list-unstyled container p-3 bg-white ">
     
             {% for product in products %}
@@ -27,22 +26,34 @@
                     <form method="post">
                       
                             <button type="submit" value = {{product.p_id}} class="btn btn-dark" name="action1">Add to Cart</button>
-                           
+                            <select class="btn btn-dark dropdown-toggle" name="quantity" id="quantity" onChange="update()">
+                              <option disabled hidden selected>Quantity</option>
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                              <option value="5">5</option>
+                            </select>
+                            
+                        
+                            <script type="text/javascript">
+                              function update() {
+                                var select = document.getElementById('language');
+                                var option = select.options[select.selectedIndex];
+                        
+                                document.getElementById('value').value = option.value;
+                                document.getElementById('text').value = option.text;
+                              }
+                        
+                              update();
+                            </script>  
                     </form>
 
-                    <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <span class="sr-only">Quantity</span>
-                    </button>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#">1</a>
-                      <a class="dropdown-item" href="#">2</a>
-                      <a class="dropdown-item" href="#">3</a>
-                      <a class="dropdown-item" href="#">4</a>
-                      <a class="dropdown-item" href="#">5</a>
-                    </div>
+                    
+                    
                   </div>
               </div>
-           
+            
 
               {% endfor %}
 

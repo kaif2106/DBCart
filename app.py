@@ -52,8 +52,9 @@ def hello():
     results = cur.fetchall()
     
     if request.method=='POST':
-        cur.execute("insert into cart (p_id, c_id, quantity) values ('" + str(request.form['action1']) + "', 'imccollum2', '1')")
-        cur.connection.commit()
+        select = request.form.get('quantity')
+        print(str(select))
+        
     cur.close()
     return render_template('products.html', products = results)
 
