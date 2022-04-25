@@ -1,5 +1,3 @@
-
-
 from flask import Flask, render_template, request, flash, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_mysqldb import MySQL
@@ -22,10 +20,20 @@ mysql = MySQL(app)
 @app.route("/customer/<cid>", methods=['GET', 'POST'])
 def customer(cid):
     cur = mysql.connection.cursor()
-    cur.execute("select * from _order")
-    results = cur.fetchall()
-    print(results)
-    return render_template('customer.html',orders = results)  
+    if request.method == "POST":
+        if request.form['aud'] == 'updateCustomer':
+            customer_first_name = request.form['First_name']
+            customer_last_name = request.form['Last_name']
+            pincode = request.form['Pincode']
+            ph_num = request.form['Phone_num']
+            email = request.form['email']
+            add_line1 = request.form['add_line1']
+            add_line2 = request.form['add_line2']
+            landmark = request.form['Landmark']
+            cur.execute(f"update personal_info set first_name = '{customer_first_name}', last_name = '{customer_last_name}', add_line1 = '{add_line1}', add_line2 = '{add_line2}', landmark = '{landmark}', pincode = '{pincode}', ph_no = '{ph_num}', email_id = '{email}' where username='{cid}'")
+            cur.connection.commit()
+    cur.close()
+    return render_template('customer.html')  
 
 @app.route("/",methods=["GET","POST"])
 def hello_world():
@@ -49,30 +57,23 @@ def hello_world():
         elif request.form['login/signup'] == 'signup':
             pass
     cur.close()
-    
-    # cur = mysql.connection.cursor()
-    # cur.execute("select * from user")
-    # results = cur.fetchall()
-    # cur.close()
-    # print(results)
     return render_template('homepage.html')
 
-@app.route('/products', methods=['GET', 'POST'])
-def hello():
+@app.route('/products/<cid>', methods=['GET', 'POST'])
+def products(cid):
     cur = mysql.connection.cursor()
     cur.execute("select * from product")
     results = cur.fetchall()
-    
     if request.method=='POST':
-        cur.execute("insert into cart (p_id, c_id, quantity) values ('" + str(request.form['action1']) + "', 'imccollum2', '1')")
+        cur.execute(f"insert into cart (p_id, c_id, quantity) values ('{request.form['action1']}', '{cid}', '1')")
         cur.connection.commit()
     cur.close()
     return render_template('products.html', products = results)
 
 @app.route("/cart", methods=['GET', 'POST'])
 def cart():
-    
     return render_template('cart.html')
+
 @app.route("/seller/<sid>", methods=['GET', 'POST'])
 def seller(sid):
     cur = mysql.connection.cursor()
@@ -88,26 +89,37 @@ def seller(sid):
             product_image = request.form['Product_image']
             product_desc = request.form['Product_desc']
             cur.execute(f"insert into product (discount, category, p_id, s_id, price, images, _desc, p_name) values ('{product_discount}', '{product_category}', '{product_id}', '{sid}', '{product_price}', '{product_image}', '{product_desc}', '{product_name}')")
-            cur.connection.commit()
+            
         elif request.form['aud'] == 'updateProduct':
-            product_id = request.form['Product_id']
+            local_product_id = request.form['Product_id']
             product_name = request.form['Product_name']
             product_category = request.form['Product_category']
             product_price = request.form['Product_price']
             product_discount = request.form['Product_discount']
             product_image = request.form['Product_image']
             product_desc = request.form['Product_desc']
+            cur.execute(f"update product set p_name = '{product_name}', category='{product_category}', price = '{product_price}', discount='{product_discount}', images = '{product_image}', _desc = '{product_desc}' where p_id='{local_product_id}' and s_id = '{sid}'")
             
+        elif request.form['aud'] == 'delete':
+            local_product_id = request.form['Product_id']
+            cur.execute(f"delete from product where p_id='{local_product_id}'")
+
+        elif request.form['aud'] == 'updateSeller':
+            seller_first_name = request.form['First_name']
+            seller_last_name = request.form['Last_name']
+            pincode = request.form['Pincode']
+            ph_num = request.form['Phone_num']
+            email = request.form['email']
+            add_line1 = request.form['add_line1']
+            add_line2 = request.form['add_line2']
+            landmark = request.form['Landmark']
+            cur.execute(f"update personal_info set first_name = '{seller_first_name}', last_name = '{seller_last_name}', add_line1 = '{add_line1}', add_line2 = '{add_line2}', landmark = '{landmark}', pincode = '{pincode}', ph_no = '{ph_num}', email_id = '{email}' where username='{sid}'")
+
+
+    cur.connection.commit()
     cur.close()
     return render_template('seller.html')    
 
-
-def customer():
-    cur = mysql.connection.cursor()
-    cur.execute("select * from _order")
-    results = cur.fetchall()
-    print(results)
-    return render_template('customer.html',orders = results) 
 
 @app.route("/history", methods=['GET', 'POST'])
 

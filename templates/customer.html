@@ -29,43 +29,43 @@
       
       <div class="container collapse" id="collapseExample">
         <div class="card card-body">
-          <form>
+          <form method = "POST">
             <p>Enter the details you want to update.</p>
             <div class="form-group">
               <label for="First_name">First Name</label>
-              <input type="text" class="form-control" id="First_name" required>
+              <input type="text" name = "First_name" class="form-control" id="First_name" required>
             </div>
             <div class="form-group">
-              <label for="First_name">Last Name</label>
-              <input type="text" class="form-control" id="last_name" required>
+              <label for="Last_name">Last Name</label>
+              <input type="text" name = "Last_name" class="form-control" id="last_name" required>
             </div>
             
             <div class="form-group">
               <label for="Pincode">Pincode</label>
-              <input type="number" class="form-control" id="Pincode" >
+              <input type="number" name = "Pincode" class="form-control" id="Pincode" >
             </div>
             <div class="form-group">
               <label for="Phone_num">Phone number</label>
-              <input type="number" class="form-control" id="Phone_num" >
+              <input type="number" name = "Phone_num" class="form-control" id="Phone_num" >
             </div>
             <div class="form-group">
               <label for="Email">Email</label>
-              <input type="email" class="form-control" id="email" >
+              <input type="email" name = "email" class="form-control" id="email" >
             </div>
             
             <div class="form-group">
               <label for="add_line1">Address line 1</label>
-              <textarea class="form-control" id="add_line1" rows="3" ></textarea>
+              <textarea class="form-control" name="add_line1" id="add_line1" rows="3" ></textarea>
             </div>
             <div class="form-group">
               <label for="add_line2">Address line 2</label>
-              <textarea class="form-control" id="add_line2" rows="3" ></textarea>
+              <textarea class="form-control" name="add_line2" id="add_line2" rows="3" ></textarea>
             </div>
             <div class="form-group">
               <label for="Landmark">Landmark</label>
-              <textarea class="form-control" id="Landmark" rows="3" ></textarea>
+              <textarea class="form-control" name="Landmark" id="Landmark" rows="3" ></textarea>
             </div>
-            <button type="submit" class="my-3 btn btn-primary">Submit</button>
+            <button type="submit" name = "aud" value = "updateCustomer" class="my-3 btn btn-primary">Submit</button>
           </form>
         </div>
       </div>
