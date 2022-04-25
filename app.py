@@ -1,5 +1,6 @@
 
-from flask import Flask, render_template, request, flash
+
+from flask import Flask, render_template, request, flash, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_mysqldb import MySQL
 
@@ -7,16 +8,24 @@ from flask_mysqldb import MySQL
 app = Flask(__name__)
 
 app.config['MYSQL_USER']="root"
-app.config['MYSQL_PASSWORD']="kushiluv25"
+app.config['MYSQL_PASSWORD']="password"
 app.config['MYSQL_HOST']="localhost"
 app.config['MYSQL_DB']="ecommerce"
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['SECRET_KEY'] = "super secret"
 
-
+product_id = 0
 
 
 mysql = MySQL(app)
+
+@app.route("/customer/<cid>", methods=['GET', 'POST'])
+def customer(cid):
+    cur = mysql.connection.cursor()
+    cur.execute("select * from _order")
+    results = cur.fetchall()
+    print(results)
+    return render_template('customer.html',orders = results)  
 
 @app.route("/",methods=["GET","POST"])
 def hello_world():
@@ -31,7 +40,10 @@ def hello_world():
             result = cur.fetchall()
             first_value = list(result[0].items())[0][1]
             if first_value==1:
-                pass
+                if entered_type == 'C':
+                    return redirect(url_for('customer', cid = entered_username))
+                else:
+                    return redirect(url_for('seller', sid = entered_username))
             else:
                 flash("Incorrect Username/Password")
         elif request.form['login/signup'] == 'signup':
@@ -62,12 +74,34 @@ def hello():
 def cart():
     
     return render_template('cart.html')
-@app.route("/seller", methods=['GET', 'POST'])
-def seller():
-    
+@app.route("/seller/<sid>", methods=['GET', 'POST'])
+def seller(sid):
+    cur = mysql.connection.cursor()
+    if request.method == "POST":
+        if request.form['aud'] == 'add':
+            # product_id = request.form['Product_id']
+            global product_id
+            product_id+=1
+            product_name = request.form['Product_name']
+            product_category = request.form['Product_category']
+            product_price = request.form['Product_price']
+            product_discount = request.form['Product_discount']
+            product_image = request.form['Product_image']
+            product_desc = request.form['Product_desc']
+            cur.execute(f"insert into product (discount, category, p_id, s_id, price, images, _desc, p_name) values ('{product_discount}', '{product_category}', '{product_id}', '{sid}', '{product_price}', '{product_image}', '{product_desc}', '{product_name}')")
+            cur.connection.commit()
+        elif request.form['aud'] == 'updateProduct':
+            product_id = request.form['Product_id']
+            product_name = request.form['Product_name']
+            product_category = request.form['Product_category']
+            product_price = request.form['Product_price']
+            product_discount = request.form['Product_discount']
+            product_image = request.form['Product_image']
+            product_desc = request.form['Product_desc']
+            
+    cur.close()
     return render_template('seller.html')    
 
-@app.route("/customer", methods=['GET', 'POST'])
 
 def customer():
     cur = mysql.connection.cursor()
