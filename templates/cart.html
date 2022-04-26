@@ -21,6 +21,11 @@
           <div class="media-body mx-3 my-2">
             <h5 class="mt-0 mb-1">{{prod[0].p_name}}</h5>
             {{prod[0]._desc}}
+            <br>
+            Quantity: {{prod[0].quantity}}
+            <br>
+            <form method = "post">
+            <button type="submit" value = {{prod[0].p_id}} class="btn btn-dark" name="del">Delete</button> </form>
           </div>
         </li>
         {% endfor %}
@@ -29,7 +34,7 @@
         
       </ul>
       <span class="m-5 p-5 h-50 d-inline-block bg-dark text-white text-justify">
-          <p>Subtotal(Y items) ₹XXXX.99</p>
+          <p>Subtotal(Y items) ₹{{total_price}}</p>
           <button class="btn btn-outline-light " type="submit">Checkout</button>
     </span>
       

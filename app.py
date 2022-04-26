@@ -14,7 +14,6 @@ app.config['SECRET_KEY'] = "super secret"
 
 product_id = 0
 
-
 mysql = MySQL(app)
 
 @app.route("/customer/<cid>", methods=['GET', 'POST'])
@@ -33,7 +32,6 @@ def customer(cid):
             cur.execute(f"update personal_info set first_name = '{customer_first_name}', last_name = '{customer_last_name}', add_line1 = '{add_line1}', add_line2 = '{add_line2}', landmark = '{landmark}', pincode = '{pincode}', ph_no = '{ph_num}', email_id = '{email}' where username='{cid}'")
             cur.connection.commit()
         if request.form['aud'] == 'prod':
-            print("yes")
             return redirect(url_for('products', cid = cid))
     cur.close()
     return render_template('customer.html', cid = cid)  
@@ -69,10 +67,7 @@ def hello_world():
             add_line2 = request.form['add_line2']
             landmark = request.form['Landmark']
             cur.execute(f"insert into user (username, _type, passwd) values ('{user_username}', '{user_type}', '{user_password}')")
-            if user_type=='C':
-                cur.execute(f"insert into customer (c_id) values ('{user_username}')")
-            if user_type=='S':
-                cur.execute(f"insert into seller (s_id) values ('{user_username}')")
+            # trigger to add in customer and seller table
             cur.execute(f"insert into personal_info (first_name, last_name ,username, add_line1, add_line2, landmark, pincode, ph_no, email_id) values ('{user_first_name}', '{user_last_name}', '{user_username}', '{add_line1}', '{add_line2}', '{landmark}', '{pincode}', '{ph_num}', '{email}')")
             cur.connection.commit()
     cur.close()
@@ -90,8 +85,12 @@ def products(cid):
             quantity = 1
             if(str(request.form.get('quantity'))!= 'None'):
                 quantity = request.form.get('quantity')
-            print(request.form['action1'])
-            cur.execute(f"insert into cart (p_id, c_id, quantity) values ('{request.form['action1']}', '{cid}', '{quantity}')")
+            cur.execute(f"select count(*) from cart where p_id = '{request.form['action1']}' and c_id = '{cid}'")
+            cc = cur.fetchall()
+            if cc[0]['count(*)']>0:
+                cur.execute(f"update cart set quantity=quantity+{quantity} where c_id='{cid}' and p_id='{request.form['action1']}'")
+            else:
+                cur.execute(f"insert into cart (p_id, c_id, quantity) values ('{request.form['action1']}', '{cid}', '{quantity}')")
             cur.connection.commit()
         
     cur.close()
@@ -102,23 +101,30 @@ def cart(cid):
     cur = mysql.connection.cursor()
     cur.execute(f"select * from cart where c_id = '{cid}'")
     results = cur.fetchall()
-    # print(results)
     lis = []
     for el in results:
         cur.execute(f"select * from product where p_id = '{el['p_id']}'")
         results2 = cur.fetchall()
+        results2[0]['quantity'] = el['quantity']
         lis.append(results2)
-    # print(lis)
-    # for el in lis:
-    #     print(el[0]['p_name'])
-    return render_template('cart.html', cid = cid, prodList = lis)
+    cur.execute(f"select sum(quantity*(select price from product where cart.p_id=product.p_id)) from cart where c_id='{cid}'")
+    results3 = cur.fetchall()
+    total_price = list(results3[0].items())[0][1]
+    print(results3)    
+    if request.method == "POST":
+        tobedel = request.form['del']
+        cur.execute(f"delete from cart where c_id='{cid}' and p_id='{tobedel}'")
+        cur.connection.commit()
+        cur.close()
+        return redirect(url_for('cart', cid = cid))
+    cur.close()
+    return render_template('cart.html', cid = cid, prodList = lis, total_price = total_price)
 
 @app.route("/seller/<sid>", methods=['GET', 'POST'])
 def seller(sid):
     cur = mysql.connection.cursor()
     if request.method == "POST":
         if request.form['aud'] == 'add':
-            # product_id = request.form['Product_id']
             global product_id
             product_id+=1
             product_name = request.form['Product_name']
@@ -141,7 +147,7 @@ def seller(sid):
             
         elif request.form['aud'] == 'delete':
             local_product_id = request.form['Product_id']
-            cur.execute(f"delete from product where p_id='{local_product_id}'")
+            cur.execute(f"delete from product where p_id='{local_product_id}' and s_id='{sid}'")
 
         elif request.form['aud'] == 'updateSeller':
             seller_first_name = request.form['First_name']
@@ -153,22 +159,18 @@ def seller(sid):
             add_line2 = request.form['add_line2']
             landmark = request.form['Landmark']
             cur.execute(f"update personal_info set first_name = '{seller_first_name}', last_name = '{seller_last_name}', add_line1 = '{add_line1}', add_line2 = '{add_line2}', landmark = '{landmark}', pincode = '{pincode}', ph_no = '{ph_num}', email_id = '{email}' where username='{sid}'")
-
-
     cur.connection.commit()
     cur.close()
     return render_template('seller.html')    
 
 
-@app.route("/history", methods=['GET', 'POST'])
-
+@app.route("/history/<cid>", methods=['GET', 'POST'])
 def history():
     cur = mysql.connection.cursor()
     cur.execute("SELECT history.quantity, history.order_date ,history.p_id,history.order_id,history._status,product.p_name ,product.price ,product.category ,product.images,product.s_id,product._desc FROM history INNER JOIN product ON history.p_id=product.p_id;")
     results = cur.fetchall()
     for i in results:
         i['price'] = "{:.2f}".format(i['price']*i['quantity'])
-    
     return render_template('history.html',history = results) 
 
 if __name__ == "__main__":
