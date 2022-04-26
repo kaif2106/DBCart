@@ -1,5 +1,4 @@
-{% extends 'homepage.html' %}
-
+{% extends 'customer.html' %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,33 +13,20 @@
     <div class="container d-flex">
     <ul class="list-unstyled container p-3 bg-white ">
 
-
+        {% for prod in prodList %}
+          
+        
         <li class="media d-flex my-5">
           <img src="https://picsum.photos/id/1002/200/300" class="mr-3" alt="...">
           <div class="media-body mx-3 my-2">
-            <h5 class="mt-0 mb-1">Product name</h5>
-            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            
+            <h5 class="mt-0 mb-1">{{prod[0].p_name}}</h5>
+            {{prod[0]._desc}}
           </div>
-          
-            
-            
-         
         </li>
-        <li class="media d-flex my-5">
-            <img src="https://picsum.photos/id/1002/200/300" class="mr-3" alt="...">
-            <div class="media-body mx-3 my-2">
-              <h5 class="mt-0 mb-1">Product name</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-          </li>
-          <li class="media d-flex my-5">
-            <img src="https://picsum.photos/id/1002/200/300" class="mr-3" alt="...">
-            <div class="media-body mx-3 my-2">
-              <h5 class="mt-0 mb-1">Product name</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-          </li>
+        {% endfor %}
+
+
+        
       </ul>
       <span class="m-5 p-5 h-50 d-inline-block bg-dark text-white text-justify">
           <p>Subtotal(Y items) ₹XXXX.99</p>

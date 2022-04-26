@@ -1,4 +1,4 @@
-{% extends 'homepage.html' %}
+{% extends 'customer.html' %}
 
 
 <!DOCTYPE html>
@@ -12,7 +12,7 @@
 </head>
 <body>
     {% block body %}
-        <ul class="list-unstyled container p-3 bg-white ">
+    <ul class="list-unstyled container p-3 bg-white ">
     
             {% for product in products %}
                 
@@ -20,7 +20,7 @@
             <li class="media d-flex my-5">
               <img src="https://picsum.photos/id/1002/200/300" class="mr-3" alt="...">
               <div class="media-body mx-3 my-2">
-                <h5 class="mt-0 mb-1">{{product.category}}</h5>
+                <h5 class="mt-0 mb-1">{{product.p_name}}</h5>
                 {{product._desc}}
                 <br><br> <div class="btn-group">
                     <form method="post">

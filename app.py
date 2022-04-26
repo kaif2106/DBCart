@@ -32,8 +32,11 @@ def customer(cid):
             landmark = request.form['Landmark']
             cur.execute(f"update personal_info set first_name = '{customer_first_name}', last_name = '{customer_last_name}', add_line1 = '{add_line1}', add_line2 = '{add_line2}', landmark = '{landmark}', pincode = '{pincode}', ph_no = '{ph_num}', email_id = '{email}' where username='{cid}'")
             cur.connection.commit()
+        if request.form['aud'] == 'prod':
+            print("yes")
+            return redirect(url_for('products', cid = cid))
     cur.close()
-    return render_template('customer.html')  
+    return render_template('customer.html', cid = cid)  
 
 @app.route("/",methods=["GET","POST"])
 def hello_world():
@@ -41,7 +44,6 @@ def hello_world():
     if request.method=='POST':
         if request.form['login/signup'] == 'login':
             entered_username = request.form['username']
-            #print(entered_username)
             entered_pass = request.form['pass']
             entered_type = request.form['options']
             cur.execute("select exists(select * from user where username='"+str(entered_username)+"' and passwd='"+str(entered_pass)+"' and _type = '"+str(entered_type)+"')")
@@ -55,7 +57,24 @@ def hello_world():
             else:
                 flash("Incorrect Username/Password")
         elif request.form['login/signup'] == 'signup':
-            pass
+            user_type = request.form['options']
+            user_username = request.form['Username']
+            user_password = request.form['Password']
+            user_first_name = request.form['First_name']
+            user_last_name = request.form['Last_name']
+            pincode = request.form['Pincode']
+            ph_num = request.form['Phone_num']
+            email = request.form['email']
+            add_line1 = request.form['add_line1']
+            add_line2 = request.form['add_line2']
+            landmark = request.form['Landmark']
+            cur.execute(f"insert into user (username, _type, passwd) values ('{user_username}', '{user_type}', '{user_password}')")
+            if user_type=='C':
+                cur.execute(f"insert into customer (c_id) values ('{user_username}')")
+            if user_type=='S':
+                cur.execute(f"insert into seller (s_id) values ('{user_username}')")
+            cur.execute(f"insert into personal_info (first_name, last_name ,username, add_line1, add_line2, landmark, pincode, ph_no, email_id) values ('{user_first_name}', '{user_last_name}', '{user_username}', '{add_line1}', '{add_line2}', '{landmark}', '{pincode}', '{ph_num}', '{email}')")
+            cur.connection.commit()
     cur.close()
     return render_template('homepage.html')
 
@@ -65,17 +84,34 @@ def products(cid):
     cur.execute("select * from product")
     results = cur.fetchall()
     if request.method=='POST':
-        cur.execute(f"insert into cart (p_id, c_id, quantity) values ('{request.form['action1']}', '{cid}', '1')")
-        cur.connection.commit()
-        select = request.form.get('quantity')
-        print(str(select))
+        if request.form['action1'] == 'cart':
+            return redirect(url_for('cart', cid = cid))
+        else:
+            quantity = 1
+            if(str(request.form.get('quantity'))!= 'None'):
+                quantity = request.form.get('quantity')
+            print(request.form['action1'])
+            cur.execute(f"insert into cart (p_id, c_id, quantity) values ('{request.form['action1']}', '{cid}', '{quantity}')")
+            cur.connection.commit()
         
     cur.close()
-    return render_template('products.html', products = results)
+    return render_template('products.html', products = results, cid = cid)
 
-@app.route("/cart", methods=['GET', 'POST'])
-def cart():
-    return render_template('cart.html')
+@app.route("/cart/<cid>", methods=['GET', 'POST'])
+def cart(cid):
+    cur = mysql.connection.cursor()
+    cur.execute(f"select * from cart where c_id = '{cid}'")
+    results = cur.fetchall()
+    # print(results)
+    lis = []
+    for el in results:
+        cur.execute(f"select * from product where p_id = '{el['p_id']}'")
+        results2 = cur.fetchall()
+        lis.append(results2)
+    # print(lis)
+    # for el in lis:
+    #     print(el[0]['p_name'])
+    return render_template('cart.html', cid = cid, prodList = lis)
 
 @app.route("/seller/<sid>", methods=['GET', 'POST'])
 def seller(sid):
