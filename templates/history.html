@@ -1,4 +1,4 @@
-{% extends 'homepage.html' %}
+{% extends 'customer.html' %}
 
 
 <!DOCTYPE html>
@@ -17,10 +17,10 @@
                 
             
             <div class="media d-flex my-5" id="{{product.order_id}}">
-              <img src="https://picsum.photos/id/1002/200/300" class="mr-3" alt="...">
+              <img src={{product.images.decode("utf-8")}} class="mr-3" alt="...">
               <div class="media-body d-flex mx-auto">
                   <div>
-                    <h5 class="mt-0 mb-1">{{product.name}}</h5>
+                    <h5 class="mt-0 mb-1">{{product.p_name}}</h5>
                     <p>{{product._desc}}</p>
                   </div>
                   <div class="mx-5" >

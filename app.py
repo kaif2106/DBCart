@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from flask import Flask, render_template, request, flash, url_for, redirect
 from flask_mysqldb import MySQL
 import random
@@ -39,8 +38,8 @@ def customer(cid):
             email = request.form['email']
             add_line1 = request.form['add_line1']
             add_line2 = request.form['add_line2']
-            landmark = request.form['Landmark']
-            cur.execute(f"update personal_info set first_name = '{customer_first_name}', last_name = '{customer_last_name}', add_line1 = '{add_line1}', add_line2 = '{add_line2}', landmark = '{landmark}', pincode = '{pincode}', ph_no = '{ph_num}', email_id = '{email}' where username='{cid}'")
+            city = request.form['city']
+            cur.execute(f"update personal_info set first_name = '{customer_first_name}', last_name = '{customer_last_name}', add_line1 = '{add_line1}', add_line2 = '{add_line2}', city = '{city}', pincode = '{pincode}', ph_no = '{ph_num}', email_id = '{email}' where username='{cid}'")
             cur.connection.commit()
         if request.form['aud'] == 'prod':
             return redirect(url_for('products', cid = cid))
@@ -76,10 +75,10 @@ def hello_world():
             email = request.form['email']
             add_line1 = request.form['add_line1']
             add_line2 = request.form['add_line2']
-            landmark = request.form['Landmark']
+            city = request.form['city']
             cur.execute(f"insert into user (username, _type, passwd) values ('{user_username}', '{user_type}', '{user_password}')")
             # trigger to add in customer and seller table
-            cur.execute(f"insert into personal_info (first_name, last_name ,username, add_line1, add_line2, landmark, pincode, ph_no, email_id) values ('{user_first_name}', '{user_last_name}', '{user_username}', '{add_line1}', '{add_line2}', '{landmark}', '{pincode}', '{ph_num}', '{email}')")
+            cur.execute(f"insert into personal_info (first_name, last_name ,username, add_line1, add_line2, city, pincode, ph_no, email_id) values ('{user_first_name}', '{user_last_name}', '{user_username}', '{add_line1}', '{add_line2}', '{city}', '{pincode}', '{ph_num}', '{email}')")
             cur.connection.commit()
     cur.close()
     return render_template('homepage.html')
@@ -89,9 +88,6 @@ def products(cid):
     cur = mysql.connection.cursor()
     cur.execute("select * from product")
     results = cur.fetchall()
-    print(results[0]['images'])
-    for res in results:
-        res['images'] = res['images'].decode("utf-8")
     if request.method=='POST':
         if request.form['action1'] == 'cart':
             return redirect(url_for('cart', cid = cid))
@@ -222,8 +218,8 @@ def seller(sid):
             email = request.form['email']
             add_line1 = request.form['add_line1']
             add_line2 = request.form['add_line2']
-            landmark = request.form['Landmark']
-            cur.execute(f"update personal_info set first_name = '{seller_first_name}', last_name = '{seller_last_name}', add_line1 = '{add_line1}', add_line2 = '{add_line2}', landmark = '{landmark}', pincode = '{pincode}', ph_no = '{ph_num}', email_id = '{email}' where username='{sid}'")
+            city = request.form['city']
+            cur.execute(f"update personal_info set first_name = '{seller_first_name}', last_name = '{seller_last_name}', add_line1 = '{add_line1}', add_line2 = '{add_line2}', city = '{city}', pincode = '{pincode}', ph_no = '{ph_num}', email_id = '{email}' where username='{sid}'")
     cur.connection.commit()
     cur.close()
     return render_template('seller.html')    
@@ -241,7 +237,7 @@ def history(cid):
 
     for i in fresults:
         i['price'] = "{:.2f}".format(i['price']*i['quantity'])
-    return render_template('history.html',history = fresults) 
+    return render_template('history.html',history = fresults, cid = cid) 
     
 @app.route("/admin", methods=['GET', 'POST'])
 def admin():
