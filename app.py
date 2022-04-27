@@ -6,7 +6,7 @@ import random
 app = Flask(__name__)
 
 app.config['MYSQL_USER']="root"
-app.config['MYSQL_PASSWORD']="password"
+app.config['MYSQL_PASSWORD']="kushiluv25"
 app.config['MYSQL_HOST']="localhost"
 app.config['MYSQL_DB']="ecommerce"
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -212,14 +212,19 @@ def seller(sid):
     return render_template('seller.html')    
 
 
-@app.route("/history/<oid>", methods=['GET', 'POST'])
-def history(oid):
+@app.route("/history/<cid>", methods=['GET', 'POST'])
+def history(cid):
     cur = mysql.connection.cursor()
     cur.execute("SELECT history.quantity, history.order_date ,history.p_id,history.order_id,history._status,product.p_name ,product.price ,product.category ,product.images,product.s_id,product._desc FROM history INNER JOIN product ON history.p_id=product.p_id;")
     results = cur.fetchall()
     for i in results:
         i['price'] = "{:.2f}".format(i['price']*i['quantity'])
     return render_template('history.html',history = results) 
-
+    
+@app.route("/checkout/<cid>", methods=['GET', 'POST'])
+def checkout():
+    cur = mysql.connection.cursor()
+    cur.close()
+    return render_template('history.html') 
 if __name__ == "__main__":
     app.run(debug=True)
