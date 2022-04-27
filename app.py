@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, flash, url_for, redirect
-from flask_sqlalchemy import SQLAlchemy
 from flask_mysqldb import MySQL
+import random
 
 
 app = Flask(__name__)
@@ -13,12 +13,20 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['SECRET_KEY'] = "super secret"
 
 product_id = 0
+order_id = 0
 
 mysql = MySQL(app)
 
 @app.route("/customer/<cid>", methods=['GET', 'POST'])
 def customer(cid):
     cur = mysql.connection.cursor()
+    fresult = []
+    cur.execute("SELECT * FROM _order INNER JOIN shipping ON _order.order_id=shipping.order_id;")
+    orders = cur.fetchall()
+    for i in range(len(orders)):
+        if(orders[i]['c_id']==cid):
+            fresult.append(orders[i])
+    
     if request.method == "POST":
         if request.form['aud'] == 'updateCustomer':
             customer_first_name = request.form['First_name']
@@ -34,7 +42,7 @@ def customer(cid):
         if request.form['aud'] == 'prod':
             return redirect(url_for('products', cid = cid))
     cur.close()
-    return render_template('customer.html', cid = cid)  
+    return render_template('customer.html', cid = cid, orders = fresult)
 
 @app.route("/",methods=["GET","POST"])
 def hello_world():
@@ -110,30 +118,70 @@ def cart(cid):
     cur.execute(f"select sum(quantity*(select price from product where cart.p_id=product.p_id)) from cart where c_id='{cid}'")
     results3 = cur.fetchall()
     total_price = list(results3[0].items())[0][1]
-    print(results3)    
+    cur.execute(f"Select count(distinct p_id) as dist_prod from cart where c_id='{cid}'")
+    results4 = cur.fetchall()
+    total_items = results4[0]['dist_prod']
     if request.method == "POST":
-        tobedel = request.form['del']
-        cur.execute(f"delete from cart where c_id='{cid}' and p_id='{tobedel}'")
-        cur.connection.commit()
-        cur.close()
-        return redirect(url_for('cart', cid = cid))
+        if request.form['del'] == "Checkout":
+            cur.execute(f"insert into _order (payment_type, c_id, total_cost) values ('O', '{cid}', '{total_price}')")
+            cur.connection.commit()
+            cur.execute(f"SELECT order_id as maxOID FROM _order ORDER BY order_id DESC LIMIT 0, 1")
+            res = cur.fetchall()
+            oid = res[0]['maxOID']
+            cur.execute(f"delete from cart where c_id = '{cid}'")
+            cur.connection.commit()
+            cur.close()
+            return redirect(url_for('checkout', oid = oid))
+        else:
+            tobedel = request.form['del']
+            cur.execute(f"delete from cart where c_id='{cid}' and p_id='{tobedel}'")
+            cur.connection.commit()
+            cur.close()
+            return redirect(url_for('cart', cid = cid))
     cur.close()
-    return render_template('cart.html', cid = cid, prodList = lis, total_price = total_price)
+    return render_template('cart.html', cid = cid, prodList = lis, total_price = total_price, total_items = total_items)
+
+@app.route("/checkout/<oid>", methods=['GET', 'POST'])
+def checkout(oid):
+    cur = mysql.connection.cursor()
+    cur.execute(f"select c_id as cc from _order where order_id = '{oid}'")
+    res = cur.fetchall()
+    cid = res[0]['cc']
+    cur.execute(f"select count(*) as ex from billing_info where order_id = {oid}")
+    result1 = cur.fetchall()
+    if result1[0]['ex'] == 0:
+        bill_num = random.randint(1000000,9999999)
+        tracking_num = random.randint(1000000,9999999)
+        courier = random.randint(1000000,9999999)
+        cur.execute(f"insert into billing_info (bill_no, order_id, gst) values ('{bill_num}', '{oid}', '0')")
+        cur.connection.commit()
+        cur.execute(f"insert into shipping values ('{oid}', '{tracking_num}', '{courier}', '2002-06-21', 'Soon')")
+        cur.connection.commit()
+    else:
+        cur.execute(f"select * from billing_info where order_id = '{oid}'")
+        result2 = cur.fetchall()
+        bill_num = result2[0]['bill_no']
+        cur.execute(f"select * from shipping where order_id = '{oid}'")
+        result3 = cur.fetchall()
+        tracking_num = result3[0]['tracking_no']
+        courier = result3[0]['courier']
+    cur.close()
+    return render_template('checkout.html', bill_num = bill_num, order_id = oid, tracking_no = tracking_num, courier = courier, cid = cid)
+
 
 @app.route("/seller/<sid>", methods=['GET', 'POST'])
 def seller(sid):
     cur = mysql.connection.cursor()
     if request.method == "POST":
         if request.form['aud'] == 'add':
-            global product_id
-            product_id+=1
+            
             product_name = request.form['Product_name']
             product_category = request.form['Product_category']
             product_price = request.form['Product_price']
             product_discount = request.form['Product_discount']
             product_image = request.form['Product_image']
             product_desc = request.form['Product_desc']
-            cur.execute(f"insert into product (discount, category, p_id, s_id, price, images, _desc, p_name) values ('{product_discount}', '{product_category}', '{product_id}', '{sid}', '{product_price}', '{product_image}', '{product_desc}', '{product_name}')")
+            cur.execute(f"insert into product (discount, category, s_id, price, images, _desc, p_name) values ('{product_discount}', '{product_category}', '{sid}', '{product_price}', '{product_image}', '{product_desc}', '{product_name}')")
             
         elif request.form['aud'] == 'updateProduct':
             local_product_id = request.form['Product_id']
@@ -164,8 +212,8 @@ def seller(sid):
     return render_template('seller.html')    
 
 
-@app.route("/history/<cid>", methods=['GET', 'POST'])
-def history():
+@app.route("/history/<oid>", methods=['GET', 'POST'])
+def history(oid):
     cur = mysql.connection.cursor()
     cur.execute("SELECT history.quantity, history.order_date ,history.p_id,history.order_id,history._status,product.p_name ,product.price ,product.category ,product.images,product.s_id,product._desc FROM history INNER JOIN product ON history.p_id=product.p_id;")
     results = cur.fetchall()

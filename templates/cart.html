@@ -34,8 +34,9 @@
         
       </ul>
       <span class="m-5 p-5 h-50 d-inline-block bg-dark text-white text-justify">
-          <p>Subtotal(Y items) ₹{{total_price}}</p>
-          <button class="btn btn-outline-light " type="submit">Checkout</button>
+          <p>Subtotal({{total_items}} items) ₹{{total_price}}</p>
+          <form method = "POST">
+          <button class="btn btn-outline-light" type="submit" name = "del" value = "Checkout">Checkout</button></form>
     </span>
       
     </div>
