@@ -139,7 +139,7 @@ def cart(cid):
             for temp in res:
                 lis.append({'p_id': temp['p_id'], 'quantity': temp['quantity']})
             for temp in lis:
-                cur.execute(f"insert into history values ('{temp['quantity']}', '2002-06-21', '{temp['p_id']}', '{cid}', '{oid}', 'DELIVERING')")
+                cur.execute(f"insert into history values ('{temp['quantity']}', '2022-06-21' , '{temp['p_id']}', '{cid}', '{oid}', 'DELIVERING')")
                 cur.connection.commit()
             # cur.execute(f"delete from cart where c_id = '{cid}'")
             # cur.connection.commit()
@@ -168,7 +168,7 @@ def checkout(oid):
         courier = random.randint(1000000,9999999)
         cur.execute(f"insert into billing_info (bill_no, order_id, gst) values ('{bill_num}', '{oid}', '0')")
         cur.connection.commit()
-        cur.execute(f"insert into shipping values ('{oid}', '{tracking_num}', '{courier}', '2002-06-21', 'Soon')")
+        cur.execute(f"insert into shipping values ('{oid}', '{tracking_num}', '{courier}', '2022-06-21', 'Soon')")
         cur.connection.commit()
     else:
         cur.execute(f"select * from billing_info where order_id = '{oid}'")
@@ -242,6 +242,7 @@ def history(cid):
 @app.route("/admin", methods=['GET', 'POST'])
 def admin():
     cur = mysql.connection.cursor()
+    res = ''
     if request.method == "POST":
         cur.execute(request.form['query'])
         res = cur.fetchall()
