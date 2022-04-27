@@ -6,7 +6,7 @@ from flask_mysqldb import MySQL
 app = Flask(__name__)
 
 app.config['MYSQL_USER']="root"
-app.config['MYSQL_PASSWORD']="password"
+app.config['MYSQL_PASSWORD']="kushiluv25"
 app.config['MYSQL_HOST']="localhost"
 app.config['MYSQL_DB']="ecommerce"
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -19,6 +19,9 @@ mysql = MySQL(app)
 @app.route("/customer/<cid>", methods=['GET', 'POST'])
 def customer(cid):
     cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM _order INNER JOIN shipping ON _order.order_id=shipping.order_id;")
+    results = cur.fetchall()
+    fresult = []
     if request.method == "POST":
         if request.form['aud'] == 'updateCustomer':
             customer_first_name = request.form['First_name']
@@ -34,7 +37,10 @@ def customer(cid):
         if request.form['aud'] == 'prod':
             return redirect(url_for('products', cid = cid))
     cur.close()
-    return render_template('customer.html', cid = cid)  
+    for i in range(len(results)):
+        if(results[i]['c_id']==cid):
+            fresult.append(results[i])       
+    return render_template('customer.html', cid = cid,orders=fresult)  
 
 @app.route("/",methods=["GET","POST"])
 def hello_world():
@@ -165,13 +171,18 @@ def seller(sid):
 
 
 @app.route("/history/<cid>", methods=['GET', 'POST'])
-def history():
+def history(cid):
     cur = mysql.connection.cursor()
     cur.execute("SELECT history.quantity, history.order_date ,history.p_id,history.order_id,history._status,product.p_name ,product.price ,product.category ,product.images,product.s_id,product._desc FROM history INNER JOIN product ON history.p_id=product.p_id;")
     results = cur.fetchall()
     for i in results:
         i['price'] = "{:.2f}".format(i['price']*i['quantity'])
     return render_template('history.html',history = results) 
-
+    
+@app.route("/checkout/<cid>", methods=['GET', 'POST'])
+def checkout():
+    cur = mysql.connection.cursor()
+    cur.close()
+    return render_template('history.html') 
 if __name__ == "__main__":
     app.run(debug=True)
