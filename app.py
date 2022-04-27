@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from flask import Flask, render_template, request, flash, url_for, redirect
 from flask_mysqldb import MySQL
 import random
@@ -88,6 +89,9 @@ def products(cid):
     cur = mysql.connection.cursor()
     cur.execute("select * from product")
     results = cur.fetchall()
+    print(results[0]['images'])
+    for res in results:
+        res['images'] = res['images'].decode("utf-8")
     if request.method=='POST':
         if request.form['action1'] == 'cart':
             return redirect(url_for('cart', cid = cid))
@@ -127,11 +131,22 @@ def cart(cid):
         if request.form['del'] == "Checkout":
             cur.execute(f"insert into _order (payment_type, c_id, total_cost) values ('O', '{cid}', '{total_price}')")
             cur.connection.commit()
+
+            # cur.execute(f"INSERT INTO history(quantity, order_date, p_id, c_id, order_id,_status) values ((select quantity from cart where cart.c_id='{cid}'), CURDATE(), (select p_id from cart where cart.c_id='{cid}'),'{cid}', (select order_id from _order where c_id='{cid}'),'temp');")
+            # cur.connection.commit()
             cur.execute(f"SELECT order_id as maxOID FROM _order ORDER BY order_id DESC LIMIT 0, 1")
             res = cur.fetchall()
             oid = res[0]['maxOID']
-            cur.execute(f"delete from cart where c_id = '{cid}'")
-            cur.connection.commit()
+            lis = []
+            cur.execute(f"select * from cart where c_id = '{cid}'")
+            res = cur.fetchall()
+            for temp in res:
+                lis.append({'p_id': temp['p_id'], 'quantity': temp['quantity']})
+            for temp in lis:
+                cur.execute(f"insert into history values ('{temp['quantity']}', '2002-06-21', '{temp['p_id']}', '{cid}', '{oid}', 'DELIVERING')")
+                cur.connection.commit()
+            # cur.execute(f"delete from cart where c_id = '{cid}'")
+            # cur.connection.commit()
             cur.close()
             return redirect(url_for('checkout', oid = oid))
         else:
@@ -228,7 +243,14 @@ def history(cid):
         i['price'] = "{:.2f}".format(i['price']*i['quantity'])
     return render_template('history.html',history = fresults) 
     
-
+@app.route("/admin", methods=['GET', 'POST'])
+def admin():
+    cur = mysql.connection.cursor()
+    if request.method == "POST":
+        cur.execute(request.form['query'])
+        res = cur.fetchall()
+        cur.close()
+    return render_template('admin.html', result = res)
 
 if __name__ == "__main__":
     app.run(debug=True)
