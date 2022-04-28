@@ -54,7 +54,7 @@ def hello_world():
             entered_username = request.form['username']
             entered_pass = request.form['pass']
             entered_type = request.form['options']
-            cur.execute("select exists(select * from user where username='"+str(entered_username)+"' and passwd='"+str(entered_pass)+"' and _type = '"+str(entered_type)+"')")
+            cur.execute(f"select exists(select * from user where username='{str(entered_username)}' and passwd='{str(entered_pass)}' and _type = '{str(entered_type)}')")
             result = cur.fetchall()
             first_value = list(result[0].items())[0][1]
             if first_value==1:
