@@ -6,7 +6,7 @@ import random
 app = Flask(__name__)
 
 app.config['MYSQL_USER']="root"
-app.config['MYSQL_PASSWORD']="password"
+app.config['MYSQL_PASSWORD']="kushiluv25"
 app.config['MYSQL_HOST']="localhost"
 app.config['MYSQL_DB']="ecommerce"
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -89,8 +89,26 @@ def products(cid):
     cur.execute("select * from product")
     results = cur.fetchall()
     if request.method=='POST':
-        if request.form['action1'] == 'cart':
-            return redirect(url_for('cart', cid = cid))
+        
+        if request.form['actionf']  == 'filter':           
+            if(str(request.form.get('filter'))!= 'None'):
+                filter = request.form.get('filter')
+                if (filter == "1"):
+                    cur.execute("select  * from product order by price DESC")
+                    results = cur.fetchall()
+                elif (filter == "2"):
+                    cur.execute("select  * from product order by price ASC")
+                    results = cur.fetchall()
+                elif (filter == "3"):
+                    cur.execute("select * from product where stock<>0")
+                    results = cur.fetchall()  
+                elif (filter == "4"):
+                    cur.execute("SELECT * FROM product ORDER BY p_name ASC")
+                    results = cur.fetchall()      
+                         
+
+        elif request.form['action1'] == 'cart':
+            return redirect(url_for('cart', cid = cid))    
         else:
             quantity = 1
             if(str(request.form.get('quantity'))!= 'None'):

@@ -13,7 +13,33 @@
 <body>
     {% block body %}
     <ul class="list-unstyled container p-3 bg-white ">
+      <div class="d-flex  my-3  p-2 bg-black   " style="width: 500px;">
+        <br>
+      <form method="post">
+                        
+        <button type="submit" value = "filter" class="btn btn-outline-light" name="actionf">filter</button>
+        <select class="btn btn-light dropdown-toggle" name="filter" id="filter" onChange="update1()">
+          <option disabled hidden selected>Select from the dropdown</option>
+          <option value="1">Price [High to low]</option>
+          <option value="2">Price [Low to high]</option>
+          <option value="3">In Stock</option>
+          <option value="4">Name</option>
+        </select>
+        
     
+        <script type="text/javascript">
+          function update1() {
+            var select = document.getElementById('language');
+            var option = select.options[select.selectedIndex];
+    
+            document.getElementById('value').value = option.value;
+            document.getElementById('text').value = option.text;
+          }
+    
+          update1();
+        </script>  
+  </form>
+  </div>
             {% for product in products %}
                 
             
