@@ -6,7 +6,7 @@ import random
 app = Flask(__name__)
 
 app.config['MYSQL_USER']="root"
-app.config['MYSQL_PASSWORD']="kushiluv25"
+app.config['MYSQL_PASSWORD']="password"
 app.config['MYSQL_HOST']="localhost"
 app.config['MYSQL_DB']="ecommerce"
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -90,7 +90,7 @@ def products(cid):
     results = cur.fetchall()
     if request.method=='POST':
         
-        if request.form['actionf']  == 'filter':           
+        if request.form['action1']  == 'filter':           
             if(str(request.form.get('filter'))!= 'None'):
                 filter = request.form.get('filter')
                 if (filter == "1"):
